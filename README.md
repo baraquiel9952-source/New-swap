@@ -57,12 +57,18 @@ a cualquiera de esos hosts sin reescribirlo.
 
 ```
 frontend/index.html     — interfaz (sube 2 fotos, llama a /api)
-api/warmup.py           — fuerza la carga de los 3 modelos
-api/swap-upload.py      — recibe source+target, devuelve el resultado
+api/index.py            — app Flask única: /api/warmup y /api/swap-upload
 lib/pipeline.py         — lógica de detección + swap + mejora
-requirements.txt        — dependencias Python
+pyproject.toml          — dependencias + entrypoint que exige Vercel
 vercel.json             — configuración de rutas y límites de función
 ```
+
+**Nota sobre el cambio de `requirements.txt` a `pyproject.toml`:** Vercel
+dejó de auto-detectar varios archivos sueltos en `api/` como funciones
+independientes (así estaba armado al principio) — ahora exige un único
+punto de entrada declarado en `pyproject.toml` vía `[tool.vercel]
+entrypoint`. Por eso ambos endpoints ahora viven en una sola app Flask
+(`api/index.py`) en vez de dos archivos separados.
 
 ## Subir a GitHub
 
